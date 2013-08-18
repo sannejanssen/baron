@@ -1,0 +1,46 @@
+/**
+ * NAVIGATION THEMING
+ */
+
+.primary-navigation {
+  position: relative;
+
+  #mobile-nav-control {
+    @include span-columns(5 omega,12);
+
+    font-weight: $font-weight-bold;
+    font-size: 26px;
+    text-align: right;
+    text-decoration: none;
+    padding-top: 12px;
+  }
+
+  .menu {
+    display: block;
+    position: absolute;
+    top: 50px;
+    width: 108%;
+    margin-left: -10px;
+    display: none;
+
+
+    background-color: $main-grey;
+    border-bottom: 3px solid lighten($main-grey, 20%);
+
+    a {
+      border-top: 3px solid lighten($main-grey, 20%);
+      color: lighten($main-grey, 40%);
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      padding: 10px 0;
+      font-size: 22px;
+      font-weight: $font-weight-medium;
+
+      &.active {
+        color: $white;
+      }
+    }
+    
+  }
+}

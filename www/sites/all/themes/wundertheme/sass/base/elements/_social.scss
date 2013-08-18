@@ -1,0 +1,64 @@
+/**
+ * SOCIAL LINKS THEMING
+ */
+
+.social-links {
+  @extend %horizontal-menu;
+
+  .link {
+    display: inline-block;
+    margin-top: 4px;
+
+    a {
+      text-transform: uppercase;
+      display: block;
+      width: 40px;
+      height: 40px;
+      text-indent: -9999px;
+    }
+    &.facebook {
+      a {
+        background-image: url(../images/sprite-social-icons.png);
+        background-repeat: no-repeat;
+        background-position: 13px 5px;
+
+        &:hover {
+          background-position: 13px -39px;
+        }
+      }
+    }
+    &.twitter {
+      a {
+        background-image: url(../images/sprite-social-icons.png);
+        background-repeat: no-repeat;
+        background-position: -28px 5px;
+
+        &:hover {
+          background-position: -28px -39px;
+        }
+      }
+    }
+    &.foursquare {
+      a {
+        background-image: url(../images/sprite-social-icons.png);
+        background-repeat: no-repeat;
+        background-position: -72px 5px;
+
+        &:hover {
+          background-position: -72px -39px;
+        }
+      }
+    }
+    &.email {
+      a {
+        background-image: url(../images/sprite-social-icons.png);
+        background-repeat: no-repeat;
+        background-position: -116px 5px;
+
+        &:hover {
+          background-position: -116px -39px;
+        }
+      }
+    }
+  }
+}

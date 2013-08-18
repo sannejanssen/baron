@@ -1,3 +1,13 @@
 /*
  * Style 1
  */
+
+/* Inverted links */
+%alt-link {
+  color: $alt-link-color;
+  
+  &:hover,
+  &:focus {
+    color: $alt-link-hover-color;
+  }
+}

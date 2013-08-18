@@ -51,28 +51,14 @@
  * - Remove id's
  * - Add aria role search for search block
  */
+$print_classes = (!empty($classes))? TRUE : FALSE;
 ?>
 
-<?php
-
-if ($classes) {
-  $classes = ' class="'. $classes . '"';
-}
-
-// Add a aria role search if this is the search block
-if($block_html_id == "block-search-form"){
-  $role = ' role="search"';
-} else {
-  $role = '';
-}
-?>
-
-<div <?php print $classes .  $attributes . $role; ?>>
-  
-  <?php print render($title_prefix); ?>
-    <?php if ($block->subject): ?>
-      <h2<?php print $title_attributes; ?>><?php print $block->subject ?></h2>
-    <?php endif;?>
-  <?php print render($title_suffix); ?>
-  <?php print $content ?>
-</div>
+<?php if($print_classes) print '<div class="' . $classes . '">'; ?>
+<?php print render($title_prefix); ?>
+<?php if ($block->subject): ?>
+  <h2<?php print $title_attributes; ?>><?php print $block->subject ?></h2>
+<?php endif;?>
+<?php print render($title_suffix); ?>
+<?php print $content ?>
+<?php if($print_classes) print '</div>'; ?>

@@ -1,0 +1,22 @@
+/**
+ * HEADER THEMING
+ */
+
+.header {
+  background-color: $main-grey;
+  background-image: url(../images/header/baron-smartphone.jpg);
+  background-repeat: no-repeat;
+  background-position: center 50px;
+  overflow: hidden;
+  height: 310px;
+
+  .top {
+    @include span-columns(12,12);
+
+
+    .social-links {
+      @include span-columns(7,12);
+
+    }
+  }
+}
