@@ -35,9 +35,35 @@ $grid-padding: $gutter-width/3;
 
 
 /* Breakpoints */
+/* default is smartphone portrait */
+$phone-landscape: 30em lt-ie9;
+$tablet-portrait: 35em lt-ie9;
+$tablet-landscape: 36em lt-ie9;
+$desktop: 40em lt-ie9;
 
-$breakpoint_1: 35em lt-ie9;
-$breakpoint_2: 55em lt-ie9;
+
+body {
+  background-color: red;
+
+  @include at-breakpoint($phone-landscape) {
+    background-color: orange;
+  }
+
+  @include at-breakpoint($tablet-portrait) {
+    background-color: green;
+  }
+
+  @include at-breakpoint($tablet-landscape) {
+    background-color: yellow;
+  }
+  @include at-breakpoint($desktop) {
+    background-color: blue;
+  }
+
+
+}
+
+
 
 
 /* Layout */
@@ -48,8 +74,4 @@ $breakpoint_2: 55em lt-ie9;
 
 header, footer, .main {
   @extend .clearfix;
-}
-
-.page {
-  background-color: orange;
 }

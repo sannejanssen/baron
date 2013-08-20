@@ -13,6 +13,11 @@
     text-align: right;
     text-decoration: none;
     padding-top: 12px;
+
+    &.open {
+      font-size: 20px; 
+      color: lighten($main-grey, 20%);
+    }
   }
 
   .menu {
@@ -22,8 +27,6 @@
     width: 108%;
     margin-left: -10px;
     display: none;
-
-
     background-color: $main-grey;
     border-bottom: 3px solid lighten($main-grey, 20%);
 
@@ -41,6 +44,5 @@
         color: $white;
       }
     }
-    
   }
 }

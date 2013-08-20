@@ -84,8 +84,7 @@
   <header role="banner" class="header">
     <div class="container">
 
-      <div class="top">
-        
+      <div class="top">       
         <?php if ($page['header']): ?>
           <?php print render($page['header']); ?>
         <?php endif; ?>
@@ -96,54 +95,75 @@
             <?php print render($page['primary_navigation']); ?>
           </nav>
         <?php endif; ?>
-
       </div>
-
-      
-      
-      
-
       
       <?php if ($logo): ?>
         <figure class="logo">
-        <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home">
-          <img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
-        </a>
+          <?php if(!$is_front): ?>
+            
+            <a class="logo-wrapper" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home">
+              <img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
+            </a>
+          <?php else: ?>
+            <span class="logo-wrapper">
+              <img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
+            </span>
+          <?php endif; ?>
+
         </figure>
       <?php endif; ?>
 
-
     </div>
   </header>
+
+  <div class="container">
+    page content
+  </div>
+
+  <footer role="contentinfo" class="footer">
+    <div class="container">
+      <div class="contact-info">
+        <h2>Contactinfo</h2>
+        <p>
+          <strong>Baron</strong>
+          <br />Florian Symoens
+          <br />+32 494 27 45 31
+          <br />info@baron-gent.be
+          <br />Overpoortstraat 48, 9000 GENT
+        </p>
+      </div>
+      
+      <div class="footer-nav">
+        <h2>Navigatie</h2>
+        <ul>
+          <li><a href="/">Startpagina</a></li>
+          <li><a href="events">Evenementen</a></li>
+          <li><a href="pictures">Foto's</a></li>
+          <li><a href="videos">Video's</a></li>
+          <li class="last"><a href="contact">Contact</a></li>
+        </ul>
+      </div>
+
+      <ul class="social-links">
+        <li class="link facebook"><a href="http://facebook.com">Facebook</a></li>
+        <li class="link twitter"><a href="http://facebook.com">Twitter</a></li>
+        <li class="link foursquare"><a href="http://facebook.com">Foursquare</a></li>
+        <li class="link email"><a href="http://facebook.com">E-mail</a></li>
+      </ul>
+      <div class="copyright">
+        <span class="name">&copy;Baron <?php print date("Y"); ?></span>
+        <span class="pipe">|</span>
+        <span class="email"><a href="info@baron-gent.be">info@baron-gent.be</a></span>
+        <span class="pipe">|</span>
+        <span class="humus">this is <a href="http://creating-humus.be">humus</a></span>
+      </div>
+    </div>
+  </footer>
+
 </div>
 
 <?php /*
 <div class="page">
-  <header role="banner">
-    <div class="container">
-
-      
-
-      <?php if($site_name OR $site_slogan ): ?>
-        <div class="site-name-slogan">
-          <?php if($site_name): ?>
-            <?php if($is_front): ?>
-              <h1 class="site-name"><a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home"><?php print $site_name; ?></a></h1>
-            <?php else : ?>
-              <p class="site-name"><a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home"><?php print $site_name; ?></a></p>
-            <?php endif; ?>
-          <?php endif; ?>
-          <?php if ($site_slogan): ?>
-            <p class="slogan"><?php print $site_slogan; ?></p>
-          <?php endif; ?>
-        </div>
-      <?php endif; ?>
-
-      
-
-    </div>
-  </header>
-
   
 
   <div class="container">
@@ -189,13 +209,7 @@
     </aside>
     <?php endif; ?>
   </div>
-  <?php if ($page['footer']): ?>
-    <footer role="contentinfo">
-      <div class="container">
-        <?php print render($page['footer']); ?>
-      </div>
-    </footer>
-  <?php endif; ?>
+  
 </div>
 
 */

@@ -45,7 +45,7 @@ input,
 select,
 textarea {
   font-family: $base-font-family;
-  font-weight: normal;
+  font-weight: $font-weight-light;
 }
 
 
@@ -60,6 +60,7 @@ h1 {
 
 h2 {
   @include adjust-font-size-to($h2-font-size);
+  margin: 20px 0 15px 0;
 }
 
 h3 {

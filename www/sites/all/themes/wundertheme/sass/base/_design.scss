@@ -5,6 +5,7 @@
  */
 
 @import 'base/elements/header';
+@import 'base/elements/footer';
 @import 'base/elements/social';
 @import 'base/elements/navigation';
 
@@ -13,9 +14,12 @@
 /* Base link settings */
 a {
   color: $base-link-color;
+  text-decoration: none;
+
   &:hover,
   &:focus {
     color: $base-link-hover-color;
+    text-decoration: underline;
   }
 }
 
@@ -29,4 +33,10 @@ html {
   }
 }
 
-  
+.footer ul {
+  list-style: none;
+
+  li {
+    list-style-type: none;
+  }
+}
