@@ -20,6 +20,20 @@
     strong {
       font-weight: $font-weight-medium;
     }
+
+    @include at-breakpoint($phone-landscape) {
+      @include span-columns(6,12);
+      border: none;
+    }
+
+    @include at-breakpoint($tablet-portrait) {
+      @include span-columns(4,12);
+    }
+
+    @include at-breakpoint($tablet-landscape) {
+      @include span-columns(3,12);
+    }
+
   }
 
   .footer-nav {
@@ -34,11 +48,43 @@
         margin-bottom: 0;
       }
     }
+
+    @include at-breakpoint($phone-landscape) {
+      @include span-columns(6 omega,12);
+      border: none;
+
+      li {
+        margin-bottom: 10px;
+      }
+    }
+
+    @include at-breakpoint($tablet-portrait) {
+      @include span-columns(4,12);
+    }
+
+    @include at-breakpoint($tablet-landscape) {
+      @include span-columns(3,12);
+    }
   }
 
   .social-links {
     @include span-columns(12);
     margin: 30px 0 20px 0;
+
+    @include at-breakpoint($phone-landscape) {
+      border-top: 1px solid #777;
+      padding-top: 20px;
+    }
+
+    @include at-breakpoint($tablet-portrait) {
+      @include span-columns(4 omega,12);
+      border-top: none;
+      padding-top: 0;
+    }
+
+    @include at-breakpoint($tablet-landscape) {
+      @include span-columns(3,12);
+    }
   }
 
   .copyright {
@@ -63,23 +109,13 @@
         }
       }
     }
-  }
 
-  @include at-breakpoint($phone-landscape) {
-
-    .contact-info {
-      @include span-columns(6,12);
-      border: none;
-    }
-    .footer-nav {
-      @include span-columns(6 omega,12);
-      border: none;
+    @include at-breakpoint($tablet-portrait) {
+      @include span-columns(4 omega,12);
     }
 
-    .social-links {
-      border-top: 1px solid #777;
-      padding-top: 20px;
+    @include at-breakpoint($tablet-landscape) {
+      @include span-columns(3 omega,12);
     }
-
   }
 }

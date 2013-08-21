@@ -12,6 +12,8 @@
 
   @include at-breakpoint($tablet-portrait) {
     background-image: url(../images/header/baron-tablet.jpg);
+    background-position: center 5px;
+    height: 400px
   }
 
   .top {
