@@ -42,26 +42,25 @@ $tablet-landscape: 55em lt-ie9;
 $desktop: 65em lt-ie9;
 
 .main {
-  background-color: red;
+  
   min-height: 200px;
 }
 
 body {
-  background-color: red;
 
   @include at-breakpoint($phone-landscape) {
-    background-color: orange;
+    /* background-color: orange; */
   }
 
   @include at-breakpoint($tablet-portrait) {
-    background-color: green;
+    /* background-color: green; */
   }
 
   @include at-breakpoint($tablet-landscape) {
-    background-color: yellow;
+    /* background-color: yellow; */
   }
   @include at-breakpoint($desktop) {
-    background-color: blue;
+    /* background-color: blue; */
   }
 
 
