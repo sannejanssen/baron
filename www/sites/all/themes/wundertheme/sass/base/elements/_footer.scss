@@ -12,10 +12,6 @@
     font-weight: $font-weight-thin;
   }
 
-  @include at-breakpoint($tablet-landscape) {
-    font-size: 0.9em;
-  }
-
   .contact-info {
     @include span-columns(12);
     border-bottom: 1px solid #777;
@@ -36,9 +32,9 @@
 
     @include at-breakpoint($tablet-landscape) {
       @include span-columns(3,12);
+      font-size: 0.9em;
       text-align: left;
     }
-
   }
 
   .footer-nav {
@@ -69,6 +65,7 @@
 
     @include at-breakpoint($tablet-landscape) {
       @include span-columns(2,12);
+      font-size: 0.9em;
       text-align: left;
       li {
         margin-bottom: 0;
@@ -93,6 +90,7 @@
 
     @include at-breakpoint($tablet-landscape) {
       @include span-columns(3,12);
+      font-size: 0.9em;
       margin: 0;
       margin-top: 155px;
       padding: 0;

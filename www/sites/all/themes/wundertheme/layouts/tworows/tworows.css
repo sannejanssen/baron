@@ -1,0 +1,35 @@
+
+
+
+/*
+.panel {
+  width: 100%;
+  float: left;
+}
+
+.widescreen,
+.top,
+.bottom {
+  width: 100%;
+  float: left;
+}
+
+.column {
+  width: 49%;
+  float: left;
+}
+
+.column.first {
+  margin-right: 2%;
+}
+
+.page-admin .widescreen,
+.page-admin .top,
+.page-admin .column {
+  margin-bottom: 10px;
+}
+
+.page-admin .bottom {
+  margin-bottom: 20px;
+}
+*/

@@ -1,0 +1,27 @@
+/*
+ * EVENT THEMING
+ */
+
+.page-events {
+  .main {
+    background-color: #222;
+    margin-top: 3px;
+  }
+
+  .row-one {
+    /* background-color: #444; */
+
+    .title-wrapper {
+      @include container;
+    }
+
+    .pane-content {
+      background-color: #444;
+
+      .event-today {
+        @include container;
+
+      }
+    }
+  }
+}

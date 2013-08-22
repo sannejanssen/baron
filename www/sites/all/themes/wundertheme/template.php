@@ -114,11 +114,9 @@ function wundertheme_preprocess_page(&$variables){
 
   // Check if we are using panels for this page
   $variables['page']['use_panels'] = FALSE;
-  /*
   if (panels_get_current_page_display()) {
      $variables['page']['use_panels'] = TRUE;
   }
-  */
 }
 /**
  * Implements theme_breadcrumb()
@@ -203,6 +201,16 @@ function wundertheme_preprocess_block(&$variables){
   $to_remove[] = 'block-menu';
   $to_remove[] = 'block-menu-block';
   $to_remove[] = 'block-node';
+
+  $variables['classes_array'] = array_diff($original_classes, $to_remove);
+}
+
+function wundertheme_preprocess_panels_pane(&$variables) {
+  $original_classes = $variables['classes_array'];
+
+  $to_remove = array();
+  $to_remove[] = 'panel-pane';
+  $to_remove[] = 'pane-views-panes';
 
   $variables['classes_array'] = array_diff($original_classes, $to_remove);
 }

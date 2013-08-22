@@ -116,39 +116,74 @@
     </div>
   </header>
 
-  <div class="container">
-    <div role="main" class="main">
+  <?php if(!$page['use_panels']): ?>
 
-      <?php if($page['highlighted']){ ?>
-        <?php print render($page['highlighted']); ?>
-      <?php } ?>
+    <div class="container">
+      <div role="main" class="main">
 
-      <?php if($messages){ ?>
+        <?php if($page['highlighted']){ ?>
+          <?php print render($page['highlighted']); ?>
+        <?php } ?>
+
+        <?php if($messages){ ?>
+          <div class="drupal-messages">
+            <?php print $messages; ?>
+          </div>
+        <?php } ?>
+
+        <?php if ($title && !$is_front): ?>
+          <?php print render($title_prefix); ?>
+            <h1><?php print $title; ?></h1>
+          <?php print render($title_suffix); ?>
+        <?php endif; ?>
+
+        <?php // print $breadcrumb; ?>
+
+        <?php if ($action_links): ?>
+          <ul class="action-links"><?php print render($action_links); ?></ul>
+        <?php endif; ?>
+
+        <?php if ($tabs['#primary']): ?>
+          <nav class="tabs"><?php print render($tabs); ?></nav>
+        <?php endif; ?>
+
+        <?php print render($page['content']); ?>
+
+      </div>
+    </div>
+
+  <?php else: ?>
+
+    <?php if($messages){ ?>
+      <div class="container">
         <div class="drupal-messages">
           <?php print $messages; ?>
         </div>
-      <?php } ?>
+      </div>
+    <?php } ?>
 
-      <?php if ($title && !$is_front): ?>
-        <?php print render($title_prefix); ?>
-          <h1><?php print $title; ?></h1>
-        <?php print render($title_suffix); ?>
-      <?php endif; ?>
-
-      <?php print $breadcrumb; ?>
-
-      <?php if ($action_links): ?>
+    <?php if ($action_links): ?>
+      <div class="container">
         <ul class="action-links"><?php print render($action_links); ?></ul>
-      <?php endif; ?>
+      </div>
+    <?php endif; ?>
 
-      <?php if ($tabs['#primary']): ?>
+    <?php if ($tabs['#primary']): ?>
+      <div class="container">
         <nav class="tabs"><?php print render($tabs); ?></nav>
-      <?php endif; ?>
+      </div>
+    <?php endif; ?>
 
+    <div role="main" class="main">
       <?php print render($page['content']); ?>
-
     </div>
-  </div>
+
+
+  <?php endif; ?>
+
+
+
+  
 
   <footer role="contentinfo" class="footer">
     <div class="container">
