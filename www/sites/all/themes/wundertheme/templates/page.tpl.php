@@ -117,7 +117,9 @@
   </header>
 
   <div class="container">
-    page content
+    <div role="main" class="main">
+      page content
+    </div>
   </div>
 
   <footer role="contentinfo" class="footer">
@@ -129,8 +131,7 @@
           <br />Florian Symoens
           <br />+32 494 27 45 31
           <br />info@baron-gent.be
-          <br />Overpoortstraat 48,
-          <br />9000 GENT
+          <br />Overpoortstraat 48, 9000 GENT
         </p>
       </div>
       

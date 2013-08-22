@@ -37,10 +37,14 @@ $grid-padding: $gutter-width/3;
 /* Breakpoints */
 /* default is smartphone portrait */
 $phone-landscape: 30em lt-ie9;
-$tablet-portrait: 35em lt-ie9;
-$tablet-landscape: 36em lt-ie9;
-$desktop: 40em lt-ie9;
+$tablet-portrait: 40em lt-ie9;
+$tablet-landscape: 55em lt-ie9;
+$desktop: 65em lt-ie9;
 
+.main {
+  background-color: red;
+  min-height: 200px;
+}
 
 body {
   background-color: red;

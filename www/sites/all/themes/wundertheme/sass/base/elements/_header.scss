@@ -11,22 +11,58 @@
   height: 310px;
 
   @include at-breakpoint($tablet-portrait) {
-    background-image: url(../images/header/baron-tablet.jpg);
+    background-image: url(../images/header/baron-tablet-portrait.jpg);
+    background-position: center 50px;
+    height: 400px
+  }
+
+  @include at-breakpoint($tablet-landscape) {
+    background-color: $desktop-main-grey;
+    background-image: url(../images/header/baron-tablet-landscape.jpg);
     background-position: center 5px;
     height: 400px
+  }
+
+  @include at-breakpoint($desktop) {
+    background-color: $desktop-main-grey;
+    background-image: url(../images/header/baron-header-desktop.png);
+    background-position: center 5px;
+    height: 550px
   }
 
   .top {
     @include span-columns(12,12);
 
+    @include at-breakpoint($tablet-landscape) {
+      @include span-columns(8 omega,12);
+    }
+
     .social-links {
       @include span-columns(7,12);
+
+      @include at-breakpoint($tablet-landscape) {
+        @include reset-columns();
+        float: right;
+
+        li {
+          background-color: $desktop-main-grey;;
+          margin-right: 4px;
+
+          &.last {
+            margin-right: 0;
+          }
+        }
+      }
     }
   }
 
 
   .logo {
     @include span-columns(12,12);
+
+    @include at-breakpoint($tablet-landscape) {
+      @include span-columns(4,12);
+    }
 
     .logo-wrapper {
       @include span-columns(8,12);
@@ -36,6 +72,16 @@
       @include at-breakpoint($phone-landscape) {
         @include span-columns(6,12);
         @include isolate(4,12);
+      }
+
+      @include at-breakpoint($tablet-portrait) {
+        @include span-columns(4,12);
+        @include isolate(5,12);
+      }
+      @include at-breakpoint($tablet-landscape) {
+        @include span-columns(9,12);
+        @include isolate(3,12);
+        margin-top: 50px;
       }
     }
   }
