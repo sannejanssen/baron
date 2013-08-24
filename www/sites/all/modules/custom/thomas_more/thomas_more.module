@@ -1,0 +1,665 @@
+<?php
+
+/**
+ * @file
+ * Custom functionality for Thomas More.
+ */
+
+// Default header image for the top of the image. Filename is enough,
+// as long as it's places in the images directory of the theme.
+define('DEFAULT_HEADER_IMAGE', 'thomas_more_default.jpg');
+
+// Value in of field_vervolgopleiding_value in {field_data_field_vervolgopleiding}
+define('MAIN_EDUCATION', 0);
+define('FOLLOW_UP_EDUCTION', 1);
+
+// Facilities taxonomy machine name.
+define('CATEGORY_ID', 'category');
+
+// Categories taxonomy machine name.
+define('FACILITY_ID', 'facility_type');
+
+// The user role that identifies a user being responsible for an
+// education.
+define('EDUCATION_RESPONSIBLE_ROLE', 'Opleidingsverantwoordelijke');
+
+/**
+ * Implements hook_menu().
+ */
+function thomas_more_menu() {
+  $items = array();
+
+  $items['media/lightbox/%node'] = array(
+    'title' => 'Afbeeldingen en video',
+    'page callback' => 'thomas_more_lightbox_media',
+    'access callback' => 'node_access',
+    'access arguments' => array('view', 2),
+    'page arguments' => array(2),
+    'file' => 'includes/pages.inc',
+  );
+
+  $items['media/lightbox/ajax'] = array(
+    'title' => 'Single ajax',
+    'page callback' => 'thomas_more_lightbox_media_ajax',
+    'access arguments' => array('access content'),
+    'file' => 'includes/pages.inc',
+  );
+
+  $items['media/lightbox/voorzieningen/%taxonomy_term'] = array(
+    'title' => 'Kies campus ajax',
+    'page callback' => 'thomas_more_lightbox_choose_campus',
+    'page arguments' => array(3),
+    'access arguments' => array('access content'),
+    'file' => 'includes/pages.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function thomas_more_menu_alter(&$items) {
+  $items['node/%/group']['title'] = 'Groep configuratie';
+}
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function thomas_more_ctools_plugin_directory($owner, $plugin_type) {
+  if ($owner == 'ctools' && (in_array($plugin_type, array('content_types')))) {
+    return 'plugins/' . $plugin_type;
+  }
+}
+
+/**
+ * Implements hook_init().
+ */
+function thomas_more_init() {
+  global $base_url;
+
+  // Default header image.
+  $image_url = $base_url . '/' . drupal_get_path('theme', 'wundertheme') . '/images/' . DEFAULT_HEADER_IMAGE;
+
+  // Convert the Drupal path to lowercase
+  $path = drupal_strtolower(drupal_get_path_alias($_GET['q']));
+
+  // Check whether an image has been defined on a path.
+  $header_images = entity_load('campagne_image');
+  foreach ($header_images as $entity) {
+    $pages = array();
+    $pages_to_compare = '';
+    $paths = field_get_items('campagne_image', $entity, 'field_paths');
+    foreach ($paths as $entity_path) {
+      $pages[] = $entity_path['url'];
+    }
+    $pages_to_compare = implode("\n", $pages);
+
+    // Compare the lowercase internal and lowercase path alias (if any).
+    $page_match = drupal_match_path($path, $pages_to_compare);
+    if ($path != $_GET['q']) {
+      $page_match = $page_match || drupal_match_path($_GET['q'], $pages_to_compare);
+    }
+
+    if ($page_match) {
+      $field_intro = field_get_items('campagne_image', $entity, 'field_homepage_intro');
+      if ($field_intro && drupal_is_front_page()) {
+        drupal_static('campaign_text', $field_intro[0]['safe_value']);
+      }
+      $image = field_get_items('campagne_image', $entity, 'field_header_image');
+      $image_url = file_create_url($image[0]['uri']);
+      break;
+    }
+  }
+
+  $style = '.header { background: transparent url("' . $image_url. '") no-repeat center center; }';
+  drupal_add_css($style, array('type' => 'inline'));
+
+  // General Thomas More jquery.
+  drupal_add_js(drupal_get_path('module', 'thomas_more') . '/js/thomas_more.js');
+  // Add javascript for Twitter feed.
+  drupal_add_js(drupal_get_path('module', 'thomas_more'). '/js/twitter.js', array('weight' => 100));
+
+  // Add horizontal tabs javascript to the page so the tabs
+  // inside the bubbles work.
+  if (drupal_is_front_page()) {
+    drupal_add_js(drupal_get_path('theme', 'wundertheme') . '/js/horizontal-tabs.js');
+  }
+}
+
+/**
+ * Implements hook_attach_view_alter().
+ */
+function thomas_more_field_attach_view_alter(&$build, $context) {
+  // Add a link to the current page in lightbox mode on images and video previews.
+  if (($context['view_mode'] == 'teaser' || $context['view_mode'] == 'popup_thumbnail') && ($context['entity_type'] == 'file')) {
+
+    // Default options.
+    $options = array(
+      'attributes' => array('class' => array('colorbox-load')),
+      // The actual width is calculated in thomas_more.js.
+      'query' => array('innerWidth' => '0', 'innerHeight' => '0')
+    );
+
+    if (arg(0) == 'node') {
+      $arg = arg(1);
+    }
+    elseif (drupal_is_front_page()) {
+      $arg = 'front';
+    }
+    else {
+      $options = array('attributes' => array('class' => array('lightbox-ajax')));
+      $arg = arg(2);
+      if ($arg == $context['entity']->fid) {
+        $options = array('attributes' => array('class' => array('active')));
+      }
+    }
+
+    // Default path.
+    $path = 'media/lightbox/' . $arg . '/' . $context['entity']->fid;
+
+    // Frontpage or testimonial node.
+    /*if (drupal_is_front_page() || !empty($context['entity']->testimonial)) {
+      $path = 'media/lightbox/testimonial/' . $context['entity']->fid;
+    }*/
+
+    if ($context['entity']->type == 'image') {
+      $context['entity']->content['file']['#path'] = array('path' => $path, 'options' => $options);
+    }
+    else {
+      $context['entity']->content['file']['#theme'] = 'image_formatter';
+      $context['entity']->content['file']['#image_style'] = $context['entity']->content['file']['#style_name'];
+      unset($context['entity']->content['file']['#style_name']);
+      $context['entity']->content['file']['#item'] = array(
+        'uri' => $context['entity']->content['file']['#path'],
+      );
+      $context['entity']->content['file']['#path'] = array('path' => $path, 'options' => $options);
+    }
+  }
+}
+
+/**
+ * Implements hook_process_file_entity().
+ */
+function thomas_more_preprocess_file_entity(&$variables) {
+  if (isset($variables['zebra'])) {
+    $variables['classes_array'][] = $variables['zebra'];
+  }
+}
+
+/**
+ * Implements hook_menu_breadcrumb_alter().
+ */
+function thomas_more_menu_breadcrumb_alter(&$breadcrumb) {
+
+  // Add deep nesting pages.
+  $node = menu_get_object('node');
+
+  if (isset($node->nid)) {
+
+    if (in_array($node->type, array('area_of_interest', 'specialization', 'education'))) {
+
+      // Put the current node at the end.
+      $end_position = ($node->type == 'specialization') ? 3 : 2;
+      $breadcrumb[$end_position] = $breadcrumb[1];
+
+    }
+
+    switch ($node->type) {
+      // Area of interest.
+      case 'area_of_interest':
+        $breadcrumb[1] = array(
+          'title' => 'Interessegebieden',
+          'href' => 'interessegebieden',
+          'localized_options' => array(),
+        );
+        break;
+
+      // Education and specialization.
+      case 'education':
+      case 'specialization':
+        $breadcrumb[1] = array(
+          'title' => 'Opleidingen',
+          'href' => 'opleidingen',
+          'localized_options' => array(),
+        );
+
+        if ($node->type == 'specialization') {
+          $edu = node_load($node->field_opleiding[LANGUAGE_NONE][0]['target_id']);
+          $breadcrumb[2] = array(
+            'title' => $edu->title,
+            'href' => 'node/' . $edu->nid,
+            'localized_options' => array(),
+          );
+        }
+
+        break;
+
+       // Page. Could be underneath a group.
+      case 'page':
+        $group_node = field_get_items('node', $node, 'og_group_ref');
+        if (!empty($group_node)) {
+          $group_node_data = node_load($group_node[0]['target_id']);
+          if (!empty($group_node_data)) {
+            $breadcrumb[1] = array(
+              'title' => $group_node_data->title,
+              'href' => 'node/' . $group_node_data->nid,
+              'localized_options' => array(),
+            );
+          }
+        }
+        break;
+
+      // Facility.
+      case 'facility':
+        $breadcrumb[3] = $breadcrumb[1];
+        $campus = node_load($node->field_facility_campus[LANGUAGE_NONE][0]['target_id']);
+        $breadcrumb[1] = array(
+          'title' => $campus->title,
+          'href' => 'node/' . $campus->nid,
+          'localized_options' => array(),
+        );
+
+        $term = taxonomy_term_load($node->field_facility_type[LANGUAGE_NONE][0]['tid']);
+        $breadcrumb[2] = array(
+          'title' => $term->name,
+          'href' => 'studentenvoorziening-per-campus/' . strtolower($campus->title) . '/' . strtolower($term->name),
+          'localized_options' => array(),
+        );
+
+        break;
+    }
+
+    ksort($breadcrumb);
+  }
+
+  // Search opleidingen.
+  if (arg(0) == 'opleidingen' && arg(1) == 'zoeken' && arg(2) == '') {
+    $breadcrumb[1]['title'] = 'Opleidingen';
+  }
+
+}
+
+/**
+ * Implements hook_entity_info_alter().
+ */
+function thomas_more_entity_info_alter(&$entity_info) {
+  // Add new fieldable panel pane types types to the fieldable panels panes entity.
+  // We will also remove the original one as it has a stupid machine name.
+  $base_path = 'admin/structure/fieldable-panels-panes/manage';
+  $pane_bundles = array(
+    'topic_block' => 'Topic block',
+    'meet_us' => t('Meet us block'),
+  );
+  $original = $entity_info['fieldable_panels_pane']['bundles']['fieldable_panels_pane'];
+  foreach ($pane_bundles as $key => $label) {
+    $new_bundle = $original;
+    $new_bundle['label'] = $label;
+    $new_bundle['admin']['real path'] = $base_path . '/' . strtr($key, '_', '-');
+    $entity_info['fieldable_panels_pane']['bundles'][$key] = $new_bundle;
+  }
+  unset($entity_info['fieldable_panels_pane']['bundles']['fieldable_panels_pane']);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function thomas_more_form_node_form_alter(&$form, $form_state) {
+
+  // For some reason, a taxonomy term reference with single value
+  // doesn't get indexed in Solr at the moment. Setting the allowed
+  // values to more than 1 makes it work again, so lets set the
+  // #multiple property in the form itself to FALSE.
+  if (isset($form['field_opleidingstype'])) {
+    $form['field_opleidingstype'][LANGUAGE_NONE]['#multiple'] = FALSE;
+  }
+
+  // The 'field_opleiding' configuration specifies education and
+  // specialization as target types as it needs to work for the 'testimonial'
+  // content type. However, this is not needed on the 'specialization'
+  // content type, so filter out 'specialization' from the options.
+  if ($form['type']['#value'] == 'specialization') {
+    unset($form['field_opleiding'][LANGUAGE_NONE]['#options']['Afstudeerrichting']);
+  }
+
+  // If the user has the 'Opleidingsverantwoordelijke' role, the group
+  // is required on the page content type.
+  if (in_array(EDUCATION_RESPONSIBLE_ROLE, $GLOBALS['user']->roles) && $form['type']['#value'] == 'page') {
+    unset($form['og_group_ref'][LANGUAGE_NONE][0]['default']['#options']['_none']);
+    $form['og_group_ref'][LANGUAGE_NONE][0]['default']['#required'] = TRUE;
+  }
+
+  // If the user has the 'Opleidingsverantwoordelijke' role,
+  // disable the 'Enable menu for this group'
+  if (in_array(EDUCATION_RESPONSIBLE_ROLE, $GLOBALS['user']->roles) && isset($form['og_menu'])) {
+    $form['og_menu']['#access'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_menu_attribute_info().
+ */
+function thomas_more_menu_attribute_info() {
+
+  $options = array('' => t('Select a menu block'));
+
+  $blocks = module_invoke('panels_mini', 'block_info');
+  foreach ($blocks as $key => $block_info) {
+    $options[$key] = $block_info['info'];
+  }
+
+  // Add a Menu block attribute.
+  $info['menu_block'] = array(
+    'label' => t('Menu block'),
+    'description' => t('Select a menu block for this menu item'),
+    'form' => array(
+      '#type' => 'select',
+      '#options' => $options,
+    ),
+  );
+
+  return $info;
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function thomas_more_field_formatter_info() {
+  return array(
+    'plain_text_breaks' => array(
+      'label' => t('Plain text with breaks'),
+      'field types' => array('text', 'text_long', 'text_with_summary'),
+      'settings' => array('trim_length' => ''),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+function thomas_more_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $element = array();
+
+  switch ($display['type']) {
+    case 'plain_text_breaks':
+      $element['trim_length'] = array(
+        '#title' => t('Trim length'),
+        '#type' => 'textfield',
+        '#size' => 10,
+        '#description' => t('Leave empty to render everything. When added, breaks will not be rendered.'),
+        '#default_value' => $settings['trim_length'],
+        '#required' => TRUE,
+      );
+      return $element;
+      break;
+  }
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function thomas_more_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $summary = '';
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  switch ($display['type']) {
+    case 'plain_text_breaks':
+      if (!empty($settings['trim_length'])) {
+        $summary = t('Trim length') . ': ' . $settings['trim_length'];
+      }
+      break;
+  }
+
+  return $summary;
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function thomas_more_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+
+  switch ($display['type']) {
+
+    case 'plain_text_breaks':
+      foreach ($items as $delta => $item) {
+        $markup = nl2br($item['value']);
+        if (!empty($display['settings']['trim_length'])) {
+          $markup = truncate_utf8($markup, $display['settings']['trim_length'], FALSE, TRUE);
+        }
+        $markup = strip_tags($markup, '<br>');
+        $element[$delta] = array('#markup' => $markup);
+      }
+      break;
+
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_apachesolr_field_mappings_alter().
+ */
+function thomas_more_apachesolr_field_mappings_alter(&$mappings, $entity_type) {
+  // allow mincount for entityreference.
+  $mappings['entityreference']['facet mincount allowed'] = TRUE;
+}
+
+/**
+ * Implements hook_apachesolr_query_alter().
+ */
+function thomas_more_apachesolr_query_alter(SolrBaseQuery $query) {
+  if ($query->getPath() == '/' || (arg(0) == 'opleidingen' || arg(1) == 'zoeken')) {
+    $query->addFilter('bundle', '(education OR specialization)');
+  }
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function thomas_more_block_info() {
+  $blocks['tm_search'] = array(
+    'info' => t('Opleidingen search form'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['tm_header_search'] = array(
+    'info' => t('Header search form'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['tm_subheader_search'] = array(
+    'info' => t('Subheader search form'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['tm_menu'] = array(
+    'info' => t('Opleidingen menu'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function thomas_more_block_view($delta = '') {
+  switch ($delta) {
+    case 'tm_search':
+      module_load_include('inc', 'thomas_more', 'includes/blocks');
+      return thomas_more_education_search_block_form();
+      break;
+    case 'tm_header_search':
+      module_load_include('inc', 'thomas_more', 'includes/blocks');
+      return thomas_more_header_search_block_form();
+      break;
+    case 'tm_subheader_search':
+      module_load_include('inc', 'thomas_more', 'includes/blocks');
+      return thomas_more_subheader_search_block_form();
+      break;
+    case 'tm_menu':
+      module_load_include('inc', 'thomas_more', 'includes/blocks');
+      return thomas_more_opleiding_menu();
+      break;
+  }
+}
+
+/**
+ * Implements hook_facetapi_url_processors().
+ */
+function thomas_more_facetapi_url_processors() {
+  return array(
+    'standard' => array(
+      'handler' => array(
+        'label' => t('FacetAPI'),
+        'class' => 'ThomasMoreFacetApi',
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_apachesolr_search_page_alter().
+ */
+function thomas_more_apachesolr_search_page_alter(&$build, $search_page) {
+  if (empty($build['search_results']['search_results'])) {
+    $build['search_results']['#markup'] = '<p>' . t('No results found') . '</p>';
+  }
+  else {
+
+    // Change the 'search extra' string.
+    if (arg(0) == 'zoeken') {
+      $total = isset($GLOBALS['pager_total_items'][0]) ? $GLOBALS['pager_total_items'][0] : 0;
+      $string = format_plural($total, t('One site result found'), t('@count site results found'));
+      $build['search_results']['search_extra']['#markup'] = '<div class="ds-search-extra">' . $string . '</div>';
+    }
+
+    // We don't do this (yet), but might in the future.
+    // Note that this code is not yet 100% fully working.
+    return;
+
+    // We need to look for specializations and nest them underneath
+    // their main education. In case the education isn't there yet,
+    // add those to the search results.
+    $educations = array();
+    $specializations = array();
+    foreach (element_children($build['search_results']['search_results']) as $i) {
+      $result = $build['search_results']['search_results'][$i];
+      if ($result['#bundle'] == 'specialization') {
+        $education = field_get_items('node', $result['#node'], 'field_opleiding');
+        $education_nid = $education[0]['target_id'];
+        if (!isset($specializations[$education_nid])) {
+          $specializations[$education_nid] = array();
+        }
+        $specializations[$education_nid][] = $result;
+      }
+      else {
+        $educations[$result['#node']->nid] = $i;
+      }
+    }
+
+    // Add the educations.
+    if (!empty($specializations)) {
+      $weight = 0;
+      $previous_results = $build['search_results']['search_results'];
+      $build['search_results']['search_results'] = array();
+      foreach ($specializations as $education_nid => $education_specializations) {
+        foreach ($education_specializations as $i => $result) {
+          if (isset($educations[$education_nid])) {
+
+          }
+          else {
+            // Add education in case it's not there yet.
+            if (!isset($build['search_results']['search_results'][$education_nid])) {
+              $education = node_load($education_nid);
+              $education_view = node_view($education, 'search_result');
+              $education_view['#weight'] = $weight;
+              $build['search_results']['search_results'][$education_nid] = $education_view;
+            }
+            $weight++;
+            $result['#weight'] = $weight;
+
+            // Move specialization after.
+            $build['search_results']['search_results'][$result['#node']->nid] = $result;
+          }
+        }
+      }
+    }
+  }
+}
+
+class ThomasMoreFacetApi extends FacetapiUrlProcessorStandard {
+  public function setBreadcrumb() {
+    // Keep default behavior.
+    if (arg(2) != '') {
+      $breadcrumb = drupal_get_breadcrumb();
+      $breadcrumb[] = l('Opleidingen', 'opleidingen');
+
+      // Sets the breadcrumb trail with the keys and filters.
+      drupal_set_breadcrumb($breadcrumb);
+    }
+  }
+}
+
+/**
+ * Implements hook_token_info().
+ */
+function thomas_more_token_info() {
+  $node = array();
+
+  $node['page-under-education'] = array(
+    'name' => t("Page title"),
+    'description' => t("This will either create a url like eduction-title/page-title or simply page-title."),
+  );
+
+  return array(
+    'tokens' => array('node' => $node),
+  );
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function thomas_more_tokens($type, $tokens, $data = array(), $options = array()) {
+  $replacements = array();
+  if ($type == 'node') {
+
+    $node = $data['node'];
+
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+        case 'page-under-education':
+
+          // Default to title in case the token is used in other places.
+          $title = $node->title;
+
+          // Check if this page belongs to a group or not.
+          if ($node->type == 'page') {
+
+              // Check if we have a group node.
+              $group_node_full = NULL;
+              if (!og_is_group_type('node', $node->type)) {
+                $group_node = field_get_items('node', $node, 'og_group_ref');
+                if (!empty($group_node)) {
+                  $group_node_full = node_load($group_node[0]['target_id']);
+                }
+              }
+
+              // Make sure this is a group.
+              if (!empty($group_node_full)) {
+                $group_group = field_get_items('node', $group_node_full, 'group_group');
+                if (!empty($group_group) && $group_group[0]['value'] == 1) {
+                  $title = $group_node_full->title . '/' . $node->title;
+                }
+              }
+          }
+
+          $replacements[$original] = $title;
+          break;
+      }
+    }
+  }
+
+  return $replacements;
+}

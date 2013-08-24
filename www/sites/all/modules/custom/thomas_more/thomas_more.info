@@ -1,0 +1,4 @@
+name = Custom code
+description = Client specific requests
+package = Thomas More
+core = 7.x

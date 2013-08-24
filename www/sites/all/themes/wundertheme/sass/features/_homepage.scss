@@ -1,0 +1,23 @@
+/*
+ * HOMEPAGE THEMING
+ */
+
+.homepage {
+  @include span-columns(12);
+  background-color: orange;
+
+  h2 {
+    font-weight: $font-weight-thin;
+  }
+
+  .events {
+    @include span-columns(12);
+    background-color: #333;
+    color: $white;
+  }
+
+  .social-blocks {
+    @include span-columns(12);
+    background-color: #999;
+  }
+}

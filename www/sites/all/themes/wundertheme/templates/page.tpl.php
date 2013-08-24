@@ -174,6 +174,12 @@
       </div>
     <?php endif; ?>
 
+    <?php if ($title && !$is_front): ?>
+      <?php print render($title_prefix); ?>
+        <h1 class="element-invisible"><?php print $title; ?></h1>
+      <?php print render($title_suffix); ?>
+    <?php endif; ?>
+
     <div role="main" class="main">
       <?php print render($page['content']); ?>
     </div>

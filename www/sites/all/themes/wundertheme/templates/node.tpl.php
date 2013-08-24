@@ -105,9 +105,7 @@ if ($classes) {
     <?php endif; ?>
   <?php print render($title_suffix); ?>
   
-  <div class="content">
-    <?php print render($content);?>
-  </div>
+  <?php print render($content);?>
 </article>
 
 

@@ -1,0 +1,4 @@
+name = Baron
+description = Baron module
+package = Baron
+core = 7.x

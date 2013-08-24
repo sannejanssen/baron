@@ -2,21 +2,7 @@
 /*
  * Custom panel layout
  */
-
-// dsm($variables);
-
-/*
-$col_class = array();
-$col_class[] = 'panel';
-
-if(!$content['col_first'] || !$content['col_second']) {
-  $col_class[] = 'single';
-}
-$css = 'class="' . implode(' ', $col_class) . '"';
-*/
 ?>
-
-
 
 <?php if($content['row_one']): ?>
   <div class="row-one">

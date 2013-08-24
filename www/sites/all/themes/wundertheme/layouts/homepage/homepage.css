@@ -1,0 +1,11 @@
+
+/* Homepage admin theming */
+.row {
+  width: 100%;
+  float: left;
+  clear: right;
+}
+
+.page-admin .row {
+  margin-bottom: 20px;  
+}
