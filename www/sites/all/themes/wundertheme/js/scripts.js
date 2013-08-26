@@ -37,4 +37,20 @@
     }
   };
 
+
+  /* Event body expander */
+  Drupal.behaviors.expandableContent = {
+    attach: function(context) {
+      $('.event-body').expander({
+        slicePoint:       120,  // default is 100
+        expandPrefix:     ' ', // default is '... '
+        expandText:       Drupal.t('read-more'), // default is 'read more'
+        collapseTimer:    5000, // re-collapses after 5 seconds; default is 0, so no re-collapsing
+        userCollapseText: '[^]',  // default is 'read less'
+        expandEffect: 'slideDown',
+        collapseEffect: 'slideUp'
+      });
+    }
+  };
+
 })(jQuery);

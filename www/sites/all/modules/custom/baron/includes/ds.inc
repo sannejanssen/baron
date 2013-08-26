@@ -16,10 +16,6 @@ function baron_ds_event_date($field) {
   $event_month = format_date($date[0]['value'], $type = 'custom', $format = 'm');
   $event_start = format_date($date[0]['value'], $type = 'custom', $format = 'H\ui');
 
-  dsm('Day: ' . $event_day);
-  dsm('Month: ' . $event_month);
-  dsm('Start: ' . $event_start);
-
   $output = '<div class="date-time">';
 
   $output .= '<span class="date">';
@@ -28,7 +24,9 @@ function baron_ds_event_date($field) {
   $output .= '<span class="month">' . $event_month . '</span>';
   $output .= '</span>';
 
-  $output .= '<span class="time">' . $event_start . '</span>';
+  $output .= '<span class="time">';
+  $output .= '<span class="start">' .  $event_start . '</span>';
+  $output .= '</span>';
 
   $output .= '</div>'; // end date-time.
 

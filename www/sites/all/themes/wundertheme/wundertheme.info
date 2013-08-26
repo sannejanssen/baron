@@ -22,6 +22,7 @@ regions[footer] = Footer
 
 ;-------------- js -------------
 ;scripts[] = js/retina.js
+scripts[] = js/jquery.expander.min.js
 scripts[] = js/scripts.js
 
 ;-------------- panels -------------

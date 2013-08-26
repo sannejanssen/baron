@@ -3,8 +3,9 @@
  */
 
 .header {
-  display: none;
+  /* display: none; */
 }
+
 .page-events {
   .main {
     background-color: #222;
@@ -15,13 +16,14 @@
 
   h2 {
     color: $white;
-    font-size: 3.125em; /* 50px */
+    font-size: 60px; /* 50px */
     line-height: 1.2em; /* 60px; */
     font-weight: $font-weight-thin;
   }
 
   .row-one {
     /* background-color: #444; */
+    margin-bottom: 40px;
 
     .title-wrapper {
       @include container;
@@ -35,5 +37,103 @@
 
       }
     }
+  }
+}
+
+.node-event {
+  &.view-mode-full {
+    @include span-columns(12,12);
+    margin-bottom: 20px;
+
+    h3 {
+      font-size: 30px;
+      line-height: 38px;
+      color: $white;
+    }
+
+    .poster {
+      @include span-columns(9 omega,12);
+    }
+
+    .date-time {
+      @include span-columns(3,12);
+
+      .date {
+        @include span-columns(12,12);
+        background-color: lighten($main-grey, 40%);
+        color: $white;
+        position: relative;
+        height: 60px;
+        padding-left: 12px;
+        margin-bottom: 5px;
+
+        .day,
+        .month {
+          @include span-columns(12);
+          font-size: 36px;
+          font-weight: $font-weight-bold;
+          line-height: 35px;
+        }
+
+        .day {
+          position: absolute;
+          top: 2px;
+          left: 2px;
+        }
+
+        .month {
+          position: absolute;
+          bottom: 2px;
+          right: 2px;
+          margin-right: 0;
+          text-align: right;
+          font-size: 24px;
+          line-height: 24px;
+        }
+
+        .slash {
+          display: block;
+          width: 4px;
+          height: 60px;
+          background-color: $white;
+          margin: 0 auto;
+          text-transform: uppercase;
+          text-indent: -9999em;
+          @include rotate(45deg);
+        }
+      }
+
+      .time {
+        @include span-columns(12,12);
+        background-color: lighten($main-grey, 20%);
+        color: $white;
+        position: relative;
+        height: 60px;
+        font-size: 24px;
+        line-height: 24px;
+        font-weight: $font-weight-bold;
+
+        .start {
+          position: absolute;
+          bottom: 0;
+          left: 2px;
+        }
+      }
+    }
+
+    .event-body {
+      @include span-columns(9 omega,12);
+      color: $white;
+
+      .read-more {
+        a {
+          display: block;
+          text-align: right;
+        }
+      }
+    }
+
+
+
   }
 }
