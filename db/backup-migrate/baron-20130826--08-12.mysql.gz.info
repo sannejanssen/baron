@@ -1,0 +1,8 @@
+filename = "baron-20130826--08-12"
+description = ""
+datestamp = "1377497537"
+generator = "Backup and Migrate (http://drupal.org/project/backup_migrate)"
+generatorversion = "7.x-2.x"
+sites[0][version] = "7.23"
+sites[0][name] = "Baron"
+sites[0][url] = "http://baron.local/"

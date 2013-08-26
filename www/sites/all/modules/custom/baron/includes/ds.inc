@@ -9,39 +9,28 @@
  * DS field: show the event date information.
  */
 function baron_ds_event_date($field) {
-
-
-/*
   $node = $field['entity'];
+  $date = field_get_items('node', $node, 'field_event_date');
 
-  $field_bus = field_get_items('node', $node, 'field_bus_stop');
-  $field_train = field_get_items('node', $node, 'field_train_stop');
-  $field_car = field_get_items('node', $node, 'field_car');
-  $field_bike = field_get_items('node', $node, 'field_bike');
-  $content = '';
+  $event_day = format_date($date[0]['value'], $type = 'custom', $format = 'd');
+  $event_month = format_date($date[0]['value'], $type = 'custom', $format = 'm');
+  $event_start = format_date($date[0]['value'], $type = 'custom', $format = 'H\ui');
 
-  if(!empty($field_bus)) {
-    $content .= '<span class="mobility bus"><div class="icon">'. t('Bus') .'</div>'. $field_bus[0]['safe_value'] . '</span>';
-  }
+  dsm('Day: ' . $event_day);
+  dsm('Month: ' . $event_month);
+  dsm('Start: ' . $event_start);
 
-  if(!empty($field_train)) {
-    $content .= '<span class="mobility train"><div class="icon">'. t('Train') .'</div>'. $field_train[0]['safe_value'] . '</span>';
-  }
+  $output = '<div class="date-time">';
 
-  if(!empty($field_car)) {
-    $content .= '<span class="mobility car"><div class="icon">'. t('Car') .'</div>'. $field_car[0]['safe_value'] . '</span>';
-  }
+  $output .= '<span class="date">';
+  $output .= '<span class="day">' . $event_day . '</span>';
+  $output .= '<span class="slash">/</span>';
+  $output .= '<span class="month">' . $event_month . '</span>';
+  $output .= '</span>';
 
-  if(!empty($field_bike)) {
-    $content .= '<span class="mobility bike"><div class="icon">'. t('Bike') .'</div>'. $field_bike[0]['safe_value'] . '</span>';
-  }
+  $output .= '<span class="time">' . $event_start . '</span>';
 
-  if ($content != '') {
-    $content = '<span class="label-inline label line">' . t('Mobility') . '</span>' . $content;
-  }
-  return $content;
-  */
+  $output .= '</div>'; // end date-time.
 
-  return "Sanne";
-
+  return $output;
 }
