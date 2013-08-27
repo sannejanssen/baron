@@ -42,13 +42,21 @@
   Drupal.behaviors.expandableContent = {
     attach: function(context) {
       $('.event-body').expander({
-        slicePoint:       120,  // default is 100
+        slicePoint:       180,  // default is 100
         expandPrefix:     ' ', // default is '... '
         expandText:       Drupal.t('read-more'), // default is 'read more'
         collapseTimer:    5000, // re-collapses after 5 seconds; default is 0, so no re-collapsing
-        userCollapseText: '[^]',  // default is 'read less'
-        expandEffect: 'slideDown',
+        userCollapseText: Drupal.t('less'),  // default is 'read less'
+        // effects for expanding and collapsing
+        expandEffect: 'fadeIn',
+        expandSpeed: 350,
+        collapseEffect: 'fadeOut',
+        collapseSpeed: 200,
+        collapseTimer: 0,
+        
+        /*expandEffect: 'slideDown',
         collapseEffect: 'slideUp'
+        */
       });
     }
   };

@@ -18,11 +18,13 @@ $font-weight-medium:  500;
 $font-weight-bold:    700;
 
 
-
 // The font sizes for h1-h6.
-$h1-font-size: 2    * $base-font-size !default;
-$h2-font-size: 1.5  * $base-font-size !default;
-$h3-font-size: 1.17 * $base-font-size !default;
+$h1-font-size: 3 * $base-font-size !default;
+$h2-font-size: 2.2 * $base-font-size !default;
+$h3-font-size: 1.5 * $base-font-size !default;
+
+/* Cleanup */
+
 $h4-font-size: 1    * $base-font-size !default;
 $h5-font-size: 0.83 * $base-font-size !default;
 $h6-font-size: 0.75 * $base-font-size !default;
@@ -60,12 +62,14 @@ h1 {
 
 h2 {
   @include adjust-font-size-to($h2-font-size);
+  font-weight: $font-weight-thin;
   margin: 20px 0 15px 0;
 }
 
 h3 {
   @include adjust-font-size-to($h3-font-size);
-  margin: 20px 0 15px 0;
+  font-weight: $font-weight-medium;
+  margin: 10px 0 15px 0;
 }
 
 h4 {
