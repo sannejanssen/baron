@@ -30,7 +30,7 @@
       border-top: 1px solid #555;
       border-bottom: 1px solid #555;
 
-      .event-today {
+      .events.today {
         @include container;
 
       }
@@ -39,11 +39,24 @@
 }
 
 /* LAYOUT */
-.node-event {
-  @include span-columns(12);
-  background-color: red;
 
+.events {
 
+  .event {
+    @include span-columns(12);
+  }
+
+  &.upcoming {
+    .event {
+      @include at-breakpoint($tablet-landscape) {
+        @include span-columns(6,12);
+
+        &.views-row-even {
+          @include omega;
+        }
+      }
+    }
+  }
 
   .poster {
     @include span-columns(9 omega,12);
@@ -55,9 +68,17 @@
     @include at-breakpoint($tablet-portrait) {
       @include span-columns(5,12);
     }
+
+    @include at-breakpoint($tablet-landscape) {
+      @include span-columns(4,12); 
+    }
+
+    @include at-breakpoint($desktop-wide) {
+      @include span-columns(5,14);
+    }
   }
 
-  .date-time {
+  .date-time-wrapper {
     @include span-columns(3,12);
 
     @include at-breakpoint($phone-landscape) {
@@ -67,9 +88,21 @@
     @include at-breakpoint($tablet-portrait) {
       @include span-columns(7 omega,12);
     }
+
+    @include at-breakpoint($tablet-landscape) {
+      @include span-columns(8 omega,12); 
+    }
+
+    @include at-breakpoint($desktop) {
+      @include span-columns(2,12);
+    }
+
+    @include at-breakpoint($desktop-wide) {
+      @include span-columns(2,14);
+    }
   }
 
-  .date {
+  .date-wrapper {
     @include span-columns(12,12);
 
     @include at-breakpoint($phone-landscape) {
@@ -80,171 +113,178 @@
       @include span-columns(2,11);
     }
 
+    @include at-breakpoint($tablet-landscape) {
+      @include span-columns(4,14); 
+    }
+
+    @include at-breakpoint($desktop) {
+      @include span-columns(12,12); 
+    }
+
     .day,
     .month {
       @include span-columns(12);
     }
   }
 
+  &.today {
 
+    .date-wrapper {
+      @include at-breakpoint($phone-landscape) {
+        @include span-columns(4,8);
+      }
 
+      @include at-breakpoint($tablet-portrait) {
+        @include span-columns(4,11);
+      }
 
+      @include at-breakpoint($tablet-landscape) {
+        @include span-columns(4,14); 
+      }
+    }
 
+  }
+
+  .time-wrapper {
+    @include span-columns(12,12);
+
+    @include at-breakpoint($phone-landscape) {
+      @include span-columns(2,8);
+    }
+    @include at-breakpoint($tablet-portrait) {
+      @include span-columns(2,11);
+    }
+
+    @include at-breakpoint($tablet-landscape) {
+      @include span-columns(2,14); 
+    }
+
+    @include at-breakpoint($desktop) {
+      @include span-columns(12,12); 
+    }
+  }
+
+  .event-body {
+    @include span-columns(9 omega,12);
+
+    @include at-breakpoint($phone-landscape) {
+      @include span-columns(8 omega,12);
+    }
+
+    @include at-breakpoint($tablet-portrait) {
+      @include span-columns(7 omega,12);
+    }
+
+    @include at-breakpoint($tablet-landscape) {
+      @include span-columns(8 omega,12); 
+    }
+
+    @include at-breakpoint($desktop) {
+      @include span-columns(6 omega,12); 
+    }
+
+    @include at-breakpoint($desktop-wide) {
+      @include span-columns(7 omega,14); 
+    }
+  }
 }
 
 /* THEMING */
 .node-event {
+  margin-bottom: 30px;
+  color: $white;
 
-  h3 {
-    color: $white;
-  }
-}
-
-
-
-.node-event {
   &.view-mode-full {
     margin-bottom: 20px;
+  }
 
-    
+  .date-time-wrapper {
+    @include at-breakpoint($phone-landscape) {
+      margin-bottom: 10px;
+    }
+  }
 
-    
+  .date-wrapper,
+  .time-wrapper {
+    position: relative;
+    margin-bottom: 5px;
+    height: 62px;
+    line-height: 0.8em; /* 24px */
+    font-weight: $font-weight-bold;
+  }
 
-    .date-time {
-      /*
-      @include span-columns(3,12);
+  .date-wrapper {
+    background-color: lighten($main-grey, 40%);
+    font-size: 1.875em; /* 30px */
+
+    .today & {
+      display: none;
 
       @include at-breakpoint($phone-landscape) {
-        @include span-columns(8 omega,12);
-        margin-bottom: 10px;
+        display: block;
       }
 
-      @include at-breakpoint($tablet-portrait) {
-        @include span-columns(7 omega,12);
-      }
-      */
-
-/*
-      .date {
-        @include span-columns(12,12);
-
-        @include at-breakpoint($phone-landscape) {
-          @include span-columns(2,8);
-        }
-
-        @include at-breakpoint($tablet-portrait) {
-          @include span-columns(2,11);
-        }
-
-        
-        background-color: lighten($main-grey, 40%);
-        color: $white;
-        position: relative;
-        height: 62px;
-        margin-bottom: 5px;
-
-        .day,
-        .month {
-          @include span-columns(12);
-          font-weight: $font-weight-bold;
-          font-size: 30px;
-          line-height: 24px;
-        }
-
-        .day {
-          position: absolute;
-          top: 2px;
-          left: 2px;
-        }
-
-        .month {
-          position: absolute;
-          bottom: 2px;
-          right: 2px;
-          margin-right: 0;
-          text-align: right;
-        }
-
-        .slash {
-          display: block;
-          width: 4px;
-          height: 60px;
-          background-color: $white;
-          margin: 0 auto;
-          text-transform: uppercase;
-          text-indent: -9999em;
-          @include rotate(55deg);
-        }
-      }
-
-      */
-
-      /*
-
-      .time {
-        @include span-columns(12,12);
-        height: 62px;
-
-        @include at-breakpoint($phone-landscape) {
-          @include span-columns(2,8);
-        }
-        @include at-breakpoint($tablet-portrait) {
-          @include span-columns(2,11);
-        }
-
-        background-color: lighten($main-grey, 20%);
-        color: $white;
-        position: relative;
-        font-size: 24px;
-        line-height: 24px;
-        font-weight: $font-weight-bold;
-
-        .start {
-          position: absolute;
-          bottom: 0;
-          left: 2px;
-        }
-      }
-      */
+      background-color: $yellow;
     }
 
-    .event-body {
+    .day {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+    }
 
-      /*
-      @include span-columns(9 omega,12);
+    .month {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      margin-right: 0;
+      text-align: right;
+    }
 
-      @include at-breakpoint($phone-landscape) {
-        @include span-columns(8 omega,12);
+    .slash {
+      display: block;
+      width: 3px;
+      height: 60px;
+      background-color: $white;
+      margin: 0 auto;
+      text-transform: uppercase;
+      text-indent: -9999em;
+      @include rotate(55deg);
+    }
+  }
+
+  .time-wrapper {
+    background-color: lighten($main-grey, 20%);
+    font-size: 1.5em; /* 24px */
+    line-height: 1em; /* 24px */
+
+    .start {
+      position: absolute;
+      bottom: 0;
+      left: 2px;
+    }
+  }
+
+  .event-body {
+    .details {
+      @include at-breakpoint($tablet-portrait) {
+        display: block !important;
+      }
+    }
+
+    .read-more,
+    .read-less {
+      a {
+        display: block;
+        background-color: lighten($main-grey, 20%);
+        padding: 5px 0;
+        margin-top: 10px;
+        text-align: center;
       }
 
       @include at-breakpoint($tablet-portrait) {
-        @include span-columns(7 omega,12);
-
-        .details {
-          display: block !important;
-        }
+        display: none !important;
       }
-
-
-      color: $white;
-
-      .read-more,
-      .read-less {
-        a {
-          display: block;
-          background-color: lighten($main-grey, 20%);
-          padding: 5px 0;
-          margin-top: 10px;
-          text-align: center;
-        }
-
-        @include at-breakpoint($tablet-portrait) {
-          display: none !important;
-        }
-
-
-      }
-      */
     }
   }
 }
