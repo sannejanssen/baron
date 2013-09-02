@@ -24,7 +24,7 @@ function baron_ds_event_date($field) {
   $output .= '<span class="date-wrapper">';
 
   if($date_event == $date_today) {
-    $output .= '<span class="today">' . t('Today') . '</span>';
+    $output .= '<span class="today">' . t('Now') . '</span>';
   }
   else {
     $output .= '<span class="day">' . $event_day . '</span>';

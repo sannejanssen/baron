@@ -4,7 +4,6 @@
 
 .homepage {
   @include span-columns(12);
-  background-color: orange;
 
   h2 {
     font-weight: $font-weight-thin;
@@ -12,8 +11,19 @@
 
   .events {
     @include span-columns(12);
-    background-color: #333;
+
+    &.row {
+      padding-top: 40px;
+      padding-bottom: 20px;
+    }
+
+    background-color: #222;
+    background-image: url(../images/event-background-2.png);
+    background-repeat: repeat;
+    margin-top: 3px;
     color: $white;
+    
+    padding-bottom: 20px;
   }
 
   .social-blocks {

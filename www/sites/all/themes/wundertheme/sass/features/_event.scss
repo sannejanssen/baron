@@ -3,7 +3,7 @@
  */
 
 .header {
-  display: none;
+  /* display: none; */
 }
 
 .page-events {
@@ -23,6 +23,8 @@
 
     .title-wrapper {
       @include container;
+      margin-top: 60px;
+      margin-bottom: 20px;
     }
 
     .pane-content {
@@ -39,16 +41,14 @@
 }
 
 /* LAYOUT */
-
 .events {
-
   .event {
     @include span-columns(12);
   }
 
   &.upcoming {
     .event {
-      @include at-breakpoint($tablet-landscape) {
+      @include at-breakpoint($desktop) {
         @include span-columns(6,12);
 
         &.views-row-even {
@@ -70,8 +70,14 @@
     }
 
     @include at-breakpoint($tablet-landscape) {
-      @include span-columns(4,12); 
+      @include span-columns(4,12);
     }
+
+    @include at-breakpoint($desktop) {
+      @include span-columns(5,12);
+    }
+
+
 
     @include at-breakpoint($desktop-wide) {
       @include span-columns(5,14);
@@ -94,7 +100,7 @@
     }
 
     @include at-breakpoint($desktop) {
-      @include span-columns(2,12);
+      @include span-columns(7 omega,12);
     }
 
     @include at-breakpoint($desktop-wide) {
@@ -114,35 +120,21 @@
     }
 
     @include at-breakpoint($tablet-landscape) {
-      @include span-columns(4,14); 
+      @include span-columns(2,14);
     }
 
     @include at-breakpoint($desktop) {
-      @include span-columns(12,12); 
+      @include span-columns(4,12);
+    }
+
+    @include at-breakpoint($desktop-wide) {
+      @include span-columns(12,12);
     }
 
     .day,
     .month {
       @include span-columns(12);
     }
-  }
-
-  &.today {
-
-    .date-wrapper {
-      @include at-breakpoint($phone-landscape) {
-        @include span-columns(4,8);
-      }
-
-      @include at-breakpoint($tablet-portrait) {
-        @include span-columns(4,11);
-      }
-
-      @include at-breakpoint($tablet-landscape) {
-        @include span-columns(4,14); 
-      }
-    }
-
   }
 
   .time-wrapper {
@@ -152,14 +144,18 @@
       @include span-columns(2,8);
     }
     @include at-breakpoint($tablet-portrait) {
-      @include span-columns(2,11);
+      @include span-columns(2,9);
     }
 
     @include at-breakpoint($tablet-landscape) {
-      @include span-columns(2,14); 
+      @include span-columns(2,13);
     }
 
     @include at-breakpoint($desktop) {
+      @include span-columns(4,12); 
+    }
+
+    @include at-breakpoint($desktop-wide) {
       @include span-columns(12,12); 
     }
   }
@@ -180,11 +176,81 @@
     }
 
     @include at-breakpoint($desktop) {
-      @include span-columns(6 omega,12); 
+      @include span-columns(7 omega,12);
     }
 
     @include at-breakpoint($desktop-wide) {
       @include span-columns(7 omega,14); 
+    }
+  }
+
+  &.today {
+    .poster {
+      @include at-breakpoint($desktop) {
+        @include span-columns(5,12);
+      }
+    }
+
+
+    .date-time-wrapper {
+      @include at-breakpoint($desktop) {
+        @include span-columns(7 omega,12);
+      }
+    }
+
+    .date-wrapper {
+      @include at-breakpoint($phone-landscape) {
+        @include span-columns(5,12);
+      }
+
+      @include at-breakpoint($tablet-portrait) {
+        @include span-columns(2,7);
+      }
+
+      @include at-breakpoint($tablet-landscape) {
+        @include span-columns(4,14); 
+      }
+
+      @include at-breakpoint($desktop) {
+        @include span-columns(3,12);
+      }
+
+      @include at-breakpoint($desktop-wide) {
+        @include span-columns(2,12);
+      }
+    }
+
+    .time-wrapper {
+
+      @include at-breakpoint($phone-landscape) {
+        @include span-columns(3,10);
+      }
+
+      @include at-breakpoint($tablet-portrait) {
+        @include span-columns(2,8);
+      }
+
+      @include at-breakpoint($desktop) {
+        @include span-columns(2,12); 
+      }
+
+      @include at-breakpoint($desktop-wide) {
+        @include span-columns(1,8);
+      }
+    }
+
+    .event-body {
+      @include at-breakpoint($desktop) {
+        @include span-columns(7 omega, 12); 
+      }
+    }
+  }
+
+  .homepage & {
+    .more-link {
+      a {
+        @include span-columns(12);
+      }
     }
   }
 }
@@ -209,7 +275,7 @@
     position: relative;
     margin-bottom: 5px;
     height: 62px;
-    line-height: 0.8em; /* 24px */
+    line-height: 1em; /* 24px */
     font-weight: $font-weight-bold;
   }
 
@@ -219,12 +285,17 @@
 
     .today & {
       display: none;
+      background-color: $yellow;
 
       @include at-breakpoint($phone-landscape) {
         display: block;
       }
+    }
 
-      background-color: $yellow;
+    .today {
+      display: block;
+      text-align: center;
+      margin-top: 17px;
     }
 
     .day {
@@ -232,6 +303,7 @@
       top: 2px;
       left: 2px;
     }
+
 
     .month {
       position: absolute;
@@ -259,9 +331,10 @@
     line-height: 1em; /* 24px */
 
     .start {
-      position: absolute;
-      bottom: 0;
-      left: 2px;
+      position: static;
+      display: block;
+      text-align: center;
+      margin-top: 20px;
     }
   }
 
@@ -288,3 +361,19 @@
     }
   }
 }
+
+.homepage {
+    .more-link {
+      a {
+        margin-top: 20px;
+        background-color: green;
+        padding: 10px 20px;
+        background-color: lighten($main-grey, 20%);
+        text-align: right;
+
+        &:hover {
+          background-color: lighten($main-grey, 40%);
+        }
+      }
+    }
+  }
